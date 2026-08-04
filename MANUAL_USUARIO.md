@@ -52,6 +52,16 @@
 
 ---
 
+## 📱 Instalación como App Móvil (APK Android)
+Para generar e instalar la APK en teléfonos o tablets Android:
+1. Instale las herramientas de Capacitor en su proyecto: `npm install @capacitor/core @capacitor/cli @capacitor/android`
+2. Construya la versión estática: `npm run build`
+3. Sincronice con Android: `npx cap add android && npx cap sync`
+4. Abra en Android Studio: `npx cap open android` y seleccione **Build > Build Bundle(s) / APK(s) > Build APK(s)**.
+5. Copie el archivo `app-debug.apk` resultante a su celular y toque para instalar.
+
+---
+
 ## 📤 Exportación a GitHub
 Todos los archivos del proyecto (incluyendo `README.md` y `MANUAL_USUARIO.md`) están completamente guardados y sincronizados.
 Para subirlos a su repositorio de GitHub:

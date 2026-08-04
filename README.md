@@ -70,6 +70,38 @@ npm run desktop:build
 ```
 Genera los archivos de instalación `.exe` (NSIS y Portable) en la carpeta `release/`.
 
+### 4. Generar App Móvil Android (.apk para celulares y tablets)
+Para empaquetar e instalar la aplicación localmente como una **APK Android** en dispositivos móviles usando **Capacitor**:
+
+1. **Instalar dependencias de Capacitor** (en la raíz de su proyecto local):
+   ```bash
+   npm install @capacitor/core @capacitor/cli @capacitor/android
+   ```
+
+2. **Inicializar Capacitor** (si es la primera vez):
+   ```bash
+   npx cap init AgroDocs com.agrodocs.app --web-dir dist
+   ```
+
+3. **Construir el proyecto web y sincronizar con Android**:
+   ```bash
+   npm run build
+   npx cap add android
+   npx cap sync
+   ```
+
+4. **Abrir y generar la APK en Android Studio**:
+   ```bash
+   npx cap open android
+   ```
+   * En Android Studio, vaya al menú superior **Build > Build Bundle(s) / APK(s) > Build APK(s)**.
+   * Una vez completado, haga clic en *locate* para obtener el archivo `app-debug.apk` generado en `android/app/build/outputs/apk/debug/`.
+
+5. **Instalación Directa en el Dispositivo Móvil**:
+   * Copie el archivo `.apk` a su teléfono Android mediante cable USB o WhatsApp/Drive.
+   * En su celular, active la opción *"Permitir instalar aplicaciones de fuentes desconocidas"*.
+   * Toque el archivo `.apk` para instalar AgroDocs como aplicación nativa Android.
+
 ---
 
 ## 🚀 Guía de Despliegue en Producción
