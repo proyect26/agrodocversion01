@@ -14,7 +14,11 @@ import SettingsPanel from './components/SettingsPanel';
 import CultivationGuide from './components/CultivationGuide';
 import DecisionCenter from './components/DecisionCenter';
 import AIAssistantView from './components/AIAssistantView';
+import UserManual from './components/UserManual';
+import AuthScreen from './components/AuthScreen';
 import { generateDemoData } from './utils/demoData';
+
+const CURRENT_USER_KEY = 'agrodocs_current_user_v1';
 
 
 
@@ -124,6 +128,20 @@ const getDefaultUntFactor = () => {
 };
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem(CURRENT_USER_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem(CURRENT_USER_KEY);
+    setCurrentUser(null);
+  };
+
   const [activeTab, setActiveTab] = useState('editor');
   const [zoom, setZoom] = useState(1);
   const [licenseStatus, setLicenseStatus] = useState({ active: true, message: '' });
@@ -470,6 +488,20 @@ function App() {
     );
   }
 
+  if (!currentUser) {
+    return (
+      <div className="app-container" style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh' }}>
+        <div className="liquid-bg-blobs no-print" style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
+          <VideoBackground />
+          <div className="bg-blob bg-blob-1"></div>
+          <div className="bg-blob bg-blob-2"></div>
+          <div className="bg-blob bg-blob-3"></div>
+        </div>
+        <AuthScreen onLoginSuccess={(user) => setCurrentUser(user)} />
+      </div>
+    );
+  }
+
   return (
     <div className="app-container">
       <div className="liquid-bg-blobs no-print">
@@ -478,7 +510,12 @@ function App() {
         <div className="bg-blob bg-blob-2"></div>
         <div className="bg-blob bg-blob-3"></div>
       </div>
-      <Header activeTab={activeTab} onTabChange={setActiveTab} />
+      <Header
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        currentUser={currentUser}
+        onLogout={handleLogout}
+      />
 
       {activeTab === 'editor' ? (
         <main className="main-content" style={{ display: 'flex', gap: '2rem', height: 'calc(100vh - 60px)' }}>
@@ -644,6 +681,8 @@ function App() {
   <CultivationGuide />
 ) : activeTab === 'ai-assistant' ? (
   <AIAssistantView />
+) : activeTab === 'manual' ? (
+  <UserManual />
 ) : (
   <main className="main-content" style={{ display: 'flex', padding: '2rem', height: 'calc(100vh - 60px)', overflowY: 'auto', justifyContent: 'center' }}>
     <div className="card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
